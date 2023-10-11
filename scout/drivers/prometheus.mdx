@@ -1,0 +1,108 @@
+---
+title: "Prometheus"
+description: "What is Prometheus, and how do I use it?"
+---
+
+Prometheus is an open-source systems monitoring and alerting toolkit. This is the recommended metric driver and is perfect for integrated environments like Kubernetes and Docker.
+
+## Installing Prometheus
+
+Prometheus can be installed in multiple ways, depending on your environment. You may also install Prometheus directly on your machine. Alternatively, <a href="https://docs.victoriametrics.com/">VictoriaMetrics</a> can be used as a drop-in alternative for Prometheus.
+
+<AccordionGroup>
+
+<Accordion title="Docker Compose">
+**Pros:**
+
+- Declarative configuration
+- Integrates well with existing infrastructure components
+
+**Cons:**
+
+- Can be confusing for beginners
+
+First, install the <a href="https://docs.docker.com/compose/">Docker Compose</a> command to your server. Then create a compose file somewhere, like `~/.deployment/scout/docker-compose.yml`
+
+```yaml
+# docker-compose.yml
+
+version: "3"
+
+services:
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - data-prometheus:/prometheus
+    networks:
+      - prometheus
+
+networks:
+  prometheus:
+    external: true
+
+# Remove this section if remote_write is used
+volumes:
+  data-prometheus:
+```
+
+</Accordion>
+
+<Accordion title="Pterodactyl">
+
+**Pros:**
+
+- Easy to set up
+- Integrates well with existing infrastructure components
+
+**Cons:**
+
+- Some shared hosts may not support it
+
+First, start by importing the <a href="https://github.com/parkervcp/eggs/tree/master/monitoring/prometheus">Prometheus Egg</a> to your panel, then create a new server with this egg.
+
+Finally, start and stop the server. We'll need to configure it first.
+
+<Warning>
+The Prometheus egg has web interface enabled by default. This may pose security risks if not configured properly.
+</Warning>
+</Accordion>
+
+<Accordion title="System Daemon">
+  This is not reccomended, but there are good guides out there on how to do it.
+  One of those being
+  <a href="https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04">
+    from DigitalOcean
+  </a>
+</Accordion>
+
+</AccordionGroup>
+
+## Configuration
+
+There are multiple configurations possible for Prometheus. Some configurations may fit your environment better than others. Please read the comments on the configuration file.
+
+These will mostly be the same for all distribution methods, however the example below is for **Docker Compose**.
+
+### Docker Compose
+
+```yaml
+# prometheus.yml
+
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "scout-1"
+    static_configs:
+      - targets:
+          ["https://<your_hop_gateway>/query/<year>/<ftc_scout_competition_id>"]
+```
+
+<Info>
+  Put this `prometheus.yml` inside the same folder as your `docker-compose.yml`
+  file
+</Info>

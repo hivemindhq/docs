@@ -7,53 +7,39 @@
   },
   "favicon": "/favicon.png",
   "colors": {
-    "primary": "#ff335a",
-    "light": "#ff335a",
-    "dark": "#0F1117",
-    "background": {
-      "dark": "#0F1117"
-    },
-    "anchors": {
-      "from": "#ff335a",
-      "to": "#ff335a"
-    }
+    "primary": "#d433ac",
+    "light": "#f164b5",
+    "dark": "#69097a",
+    "ultraLight": "#f6eef4",
+    "ultraDark": "#69097a"
   },
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:hi@itspolar.dev"
-    }
-  ],
   "topbarCtaButton": {
-    "name": "Contribute",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Main Site",
+    "url": "https://hivemindrobotics.cc"
   },
-  "anchors": [
-    {
-      "name": "Community",
-      "icon": "discord",
-      "url": "#"
-    }
-  ],
+  "anchors": [],
   "navigation": [
     {
       "group": "Getting Started",
       "pages": [
-        "introduction",
-        "quickstart"
+        "introduction"
       ]
     },
     {
-      "group": "Swarm",
+      "group": "Scout",
       "pages": [
-        "swarm/overview",
-        "swarm/getting-started"
+        "scout/overview",
+        "scout/getting-started",
+        {
+          "group": "Drivers",
+          "pages": [
+            "scout/drivers/prometheus"
+          ]
+        }
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "github": "https://github.com/hivemindhq"
   }
 }

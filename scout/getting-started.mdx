@@ -1,0 +1,139 @@
+---
+title: "Getting Started"
+description: "This guide will walk you through setting up Scout on your system"
+---
+
+## Getting Scout
+
+Currently, it's reccomended to run Scout in the cloud. You can also run it in Docker.
+
+### Running in the cloud
+
+We reccomended using <a href="https://hop.io">Hop</a> to run Scout in the cloud, however basically any cloud provider that supports Rust can run Scout.
+
+First, download Scout from source, you can do this over the Git CLI.
+
+```bash
+git clone https://github.com/hivemindhq/scout
+```
+
+Then create yourself a new Hop account, you can do this by going to the <a href="https://console.hop.io">Hop Console</a> and just registering an account.
+
+Next, install the Hop CLI.
+
+### Installing the Hop CLI
+
+#### Shell Script (Linux, macOS and FreeBSD)
+
+```bash
+curl -fsSL https://download.hop.sh/install | sh
+```
+
+#### Arch Linux
+
+Use your favourite AUR helper to install the package:
+
+```bash
+# yay example
+$ yay -S hop-cli
+```
+
+#### Windows
+
+Install with the
+[Hop Windows Installer 64bit](https://download.hop.sh/windows/x86_64) or the
+[Hop Windows Installer 32bit](https://download.hop.sh/windows/i686)
+
+### Using Hop Auth
+
+Run the following command after installing to login to your Hop account.
+
+```bash
+hop auth login
+```
+
+<Tip>
+  If you want to login to the Hop CLI in a headless environment (e.g. without a
+  browser), then you can provide a Project Token or a PAT using the `--token`
+  flag.
+</Tip>
+
+### Deploying Scout to Hop
+
+Go into where you cloned Scout, open a new terminal and run the following command.
+
+```bash
+hop deploy
+```
+
+This will deploy Scout onto Hop's global edge network.
+
+#### Creating a HTTP Gateway
+
+<AccordionGroup>
+
+<Accordion title="Console">
+1. Navigate to the Gateways tab in an Ignite deployment:
+
+<Frame>
+  ![](https://mintlify.s3-us-west-1.amazonaws.com/hopio/images/hop-gw-demo-1.webp)
+</Frame>
+
+2. Click on the "Create Gateway" button in the top right:
+
+<Frame>
+  ![](https://mintlify.s3-us-west-1.amazonaws.com/hopio/images/hop-gw-demo-2.webp)
+</Frame>
+
+3. You will be presented with a modal:
+
+<Frame>
+  ![](https://mintlify.s3-us-west-1.amazonaws.com/hopio/images/hop-gw-demo-3.webp)
+</Frame>
+
+Here, you can select the gateway type and target port, the default port Scout will run on is 3000.
+
+Gateway type can be either:
+
+- External, or
+- Internal
+
+If you plan on running Prometheus in Hop, you can use an Internal gateway. However, it is reccomended to use the external gateway. This allows you to access Scout from any Prometheus distribution.
+
+At the moment, external gateways only support HTTP(S), so there's no option to
+select the protocol yet.
+
+The target port should be the port your app listens on. The gateway will load
+balance requests between containers on the target port. HTTP gateways will
+automatically handle external HTTP and HTTPS termination on the correct ports
+(80 & 443), so you don't need to run your application on these ports.
+
+4. Click **Create Gateway**.
+
+</Accordion>
+
+<Accordion title="CLI">
+To create a gateway interactively, run the following command:
+
+_The default port Scout will attempt to bind to is 3000_
+
+```bash
+hop gateways create [--project <project-namespace>]
+```
+
+This will take you through the steps to set up a gateway on a deployment.
+
+It's reccomended to use an External gateway so that you can run an external Prometheus.
+
+You can also create a gateway non-interactively by passing the following flags:
+
+```sh
+hop gateways create \
+  --type <type> \
+  --target-port <port> \
+  --project [namespace]
+```
+
+</Accordion>
+
+</AccordionGroup>
